@@ -33,28 +33,38 @@ export default function Home() {
   const currentStep = steps[currentStepIndex];
 
   return (
-    <div className="container mx-auto p-4 md:p-8">
-      <header className="text-center mb-8">
-        <h1 className="text-4xl md:text-5xl font-bold text-slate-900">Interactive Backpropagation</h1>
-        <p className="mt-4 text-lg text-slate-600 max-w-3xl mx-auto">An interactive, step-by-step walkthrough of how a neural network learns.</p>
+    <div className="flex flex-col h-screen">
+      <header className="p-4 bg-white border-b border-slate-200">
+        <h1 className="text-2xl font-bold text-slate-900">Interactive Backpropagation</h1>
+        <p className="text-slate-600">An interactive, step-by-step walkthrough of how a neural network learns.</p>
       </header>
 
-      <main className="space-y-12">
-        <ClientOnly>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <NeuralNetworkDiagram nnState={nnState} highlight={currentStep.highlight} />
-            <Stepper 
-              step={currentStep} 
-              stepIndex={currentStepIndex} 
-              totalSteps={steps.length} 
-              onNext={handleNext} 
-              onPrev={handlePrev} 
-              nnState={nnState}
-            />
-          </div>
-          <SummaryChart nnState={nnState} />
-        </ClientOnly>
-      </main>
+      <div className="flex-1 flex flex-col">
+        <div className="flex flex-1 overflow-hidden">
+          <ClientOnly>
+            <div className="w-1/2 overflow-auto p-4">
+              <NeuralNetworkDiagram nnState={nnState} highlight={currentStep.highlight} />
+            </div>
+            
+            <div className="w-1/2 overflow-auto p-4 bg-slate-50 border-l border-slate-200">
+              <Stepper 
+                step={currentStep} 
+                stepIndex={currentStepIndex} 
+                totalSteps={steps.length} 
+                onNext={handleNext} 
+                onPrev={handlePrev} 
+                nnState={nnState}
+              />
+            </div>
+          </ClientOnly>
+        </div>
+
+        <div className="border-t border-slate-200 p-4">
+          <ClientOnly>
+            <SummaryChart nnState={nnState} />
+          </ClientOnly>
+        </div>
+      </div>
     </div>
   );
 }

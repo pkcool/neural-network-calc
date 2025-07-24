@@ -182,21 +182,23 @@ const NeuralNetworkDiagram: React.FC<NeuralNetworkDiagramProps> = ({ nnState, hi
   }, [nnState, highlight, dimensions]);
 
   return (
-    <section id="nn-visualization" className="p-6 bg-white rounded-lg shadow-md">
-      <h2 className="text-2xl font-bold text-center mb-6">Neural Network Structure & Values</h2>
+    <div className="bg-white rounded-lg h-full flex flex-col">
+      <div className="p-4 border-b border-slate-200">
+        <h2 className="text-xl font-semibold text-slate-800">Neural Network Structure & Values</h2>
+      </div>
       <div 
         ref={containerRef}
-        className="relative w-full"
-        style={{ height: '500px' }}
+        className="relative flex-1 p-4"
       >
         <svg 
           ref={svgRef}
           width="100%" 
           height="100%"
-          className="absolute top-0 left-0"
+          className="absolute inset-0 m-auto"
+          preserveAspectRatio="xMidYMid meet"
         />
       </div>
-    </section>
+    </div>
   );
 };
 
