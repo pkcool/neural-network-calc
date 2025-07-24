@@ -39,14 +39,20 @@ export default function Home() {
         <p className="text-slate-600">An interactive, step-by-step walkthrough of how a neural network learns.</p>
       </header>
 
-      <div className="flex-1 flex flex-col bg-white">
+      <div className="flex-1 flex flex-col bg-white overflow-hidden">
         <div className="flex flex-1 overflow-hidden">
           <ClientOnly>
-            <div className="w-1/2 overflow-auto p-4 bg-white">
-              <NeuralNetworkDiagram nnState={nnState} highlight={currentStep.highlight} />
+            {/* Neural Network Diagram - Fixed height container */}
+            <div className="w-1/2 h-[calc(100vh-200px)] overflow-auto p-4 bg-white">
+              <NeuralNetworkDiagram 
+                nnState={nnState} 
+                highlight={currentStep.highlight} 
+                className="h-full"
+              />
             </div>
             
-            <div className="w-1/2 overflow-auto p-4 bg-white border-l border-slate-200">
+            {/* Stepper - Fixed height container with scroll */}
+            <div className="w-1/2 h-[calc(100vh-200px)] overflow-y-auto p-4 bg-white border-l border-slate-200">
               <Stepper 
                 step={currentStep} 
                 stepIndex={currentStepIndex} 

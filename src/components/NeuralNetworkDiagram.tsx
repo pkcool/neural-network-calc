@@ -5,6 +5,7 @@ import { NNState } from '@/types';
 interface NeuralNetworkDiagramProps {
   nnState: NNState;
   highlight: { nodes: string[]; weights: string[] };
+  className?: string;
 }
 
 interface NodeData {
@@ -23,7 +24,11 @@ interface LinkData {
   value: number;
 }
 
-const NeuralNetworkDiagram: React.FC<NeuralNetworkDiagramProps> = ({ nnState, highlight }) => {
+const NeuralNetworkDiagram: React.FC<NeuralNetworkDiagramProps> = ({ 
+  nnState, 
+  highlight, 
+  className = '' 
+}) => {
   const { inputs, weights, calculated } = nnState;
   const svgRef = useRef<SVGSVGElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -195,13 +200,14 @@ const NeuralNetworkDiagram: React.FC<NeuralNetworkDiagramProps> = ({ nnState, hi
       </div>
       <div 
         ref={containerRef}
-        className="relative flex-1 p-4"
+        className={`relative w-full h-full ${className}`}
       >
         <svg 
           ref={svgRef}
           width="100%" 
           height="100%"
-          className="absolute inset-0 m-auto"
+          viewBox={`0 0 ${dimensions.width} ${dimensions.height}`}
+          className="block"
           preserveAspectRatio="xMidYMid meet"
         />
       </div>

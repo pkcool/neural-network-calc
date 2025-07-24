@@ -39,29 +39,56 @@ const Stepper: React.FC<StepperProps> = ({ step, stepIndex, totalSteps, onNext, 
   const { result } = step.calculation(nnState);
 
   return (
-    <section id="stepper" className="bg-white rounded-lg shadow-md p-6 md:p-8">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <div id="explanation-container" className="space-y-4">
-          <h2 className="text-2xl font-bold">Step {stepIndex + 1}: {step.title}</h2>
-          <p className="text-slate-700 leading-relaxed">{step.explanation}</p>
-          {step.formula && (
-            <div className="math-container">
-              <KatexComponent formula={step.formula} />
-            </div>
-          )}
-        </div>
-        <div id="calculation-container" className="calc-box">
-          <h3 className="calc-title">Live Calculation</h3>
-          <div className="calc-value" dangerouslySetInnerHTML={{ __html: result }}></div>
+    <div className="h-full flex flex-col">
+      <div className="flex-1 overflow-auto pr-2">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div id="explanation-container" className="space-y-4">
+            <h2 className="text-2xl font-bold text-slate-800">Step {stepIndex + 1}: {step.title}</h2>
+            <p className="text-slate-700 leading-relaxed">{step.explanation}</p>
+            {step.formula && (
+              <div className="math-container">
+                <KatexComponent formula={step.formula} />
+              </div>
+            )}
+          </div>
+          <div id="calculation-container" className="calc-box">
+            <h3 className="calc-title">Live Calculation</h3>
+            <div className="calc-value" dangerouslySetInnerHTML={{ __html: result }}></div>
+          </div>
         </div>
       </div>
 
-      <div className="mt-8 flex justify-between items-center">
-        <button onClick={onPrev} disabled={stepIndex === 0} className="px-6 py-2 bg-slate-200 text-slate-700 rounded-md hover:bg-slate-300 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">Previous</button>
-        <span className="text-sm text-slate-500">Step {stepIndex + 1} / {totalSteps}</span>
-        <button onClick={onNext} disabled={stepIndex === totalSteps - 1} className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 transition-colors">Next</button>
+      {/* Fixed position button bar at the bottom */}
+      <div className="stepper-navigation">
+        <div className="flex justify-between items-center">
+          <button 
+            onClick={onPrev} 
+            disabled={stepIndex === 0} 
+            className="button button-secondary"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+            Previous
+          </button>
+          
+          <span className="text-sm text-slate-500 font-medium">
+            Step {stepIndex + 1} of {totalSteps}
+          </span>
+          
+          <button 
+            onClick={onNext} 
+            disabled={stepIndex === totalSteps - 1} 
+            className="button button-primary"
+          >
+            Next
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+        </div>
       </div>
-    </section>
+    </div>
   );
 };
 
