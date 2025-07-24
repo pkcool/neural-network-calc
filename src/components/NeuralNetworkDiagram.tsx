@@ -57,10 +57,17 @@ const NeuralNetworkDiagram: React.FC<NeuralNetworkDiagramProps> = ({ nnState, hi
     const margin = { top: 20, right: 20, bottom: 20, left: 20 };
     const width = dimensions.width - margin.left - margin.right;
     const height = dimensions.height - margin.top - margin.bottom;
+    
+    // Add white background
+    svg.append('rect')
+      .attr('width', '100%')
+      .attr('height', '100%')
+      .attr('fill', 'white');
 
     // Create layers for better z-index control
     const g = svg.append('g')
-      .attr('transform', `translate(${margin.left},${margin.top})`);
+      .attr('transform', `translate(${margin.left},${margin.top})`)
+      .attr('class', 'nn-content');
 
     // Define node positions in layers (input, hidden, output)
     const layers = [

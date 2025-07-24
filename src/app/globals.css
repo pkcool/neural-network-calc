@@ -2,10 +2,22 @@
 @tailwind components;
 @tailwind utilities;
 
+html, body, #__next {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
 body {
     font-family: 'Inter', sans-serif;
-    background-color: #f8fafc; /* slate-50 */
+    background-color: #ffffff; /* white */
     color: #1e293b; /* slate-800 */
+}
+
+/* Ensure all main containers have white background */
+#__next > div {
+    background-color: #ffffff;
+    min-height: 100%;
 }
 .math-container {
     font-size: 1.1rem;

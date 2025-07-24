@@ -33,20 +33,20 @@ export default function Home() {
   const currentStep = steps[currentStepIndex];
 
   return (
-    <div className="flex flex-col h-screen">
+    <div className="flex flex-col min-h-screen bg-white">
       <header className="p-4 bg-white border-b border-slate-200">
         <h1 className="text-2xl font-bold text-slate-900">Interactive Backpropagation</h1>
         <p className="text-slate-600">An interactive, step-by-step walkthrough of how a neural network learns.</p>
       </header>
 
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col bg-white">
         <div className="flex flex-1 overflow-hidden">
           <ClientOnly>
-            <div className="w-1/2 overflow-auto p-4">
+            <div className="w-1/2 overflow-auto p-4 bg-white">
               <NeuralNetworkDiagram nnState={nnState} highlight={currentStep.highlight} />
             </div>
             
-            <div className="w-1/2 overflow-auto p-4 bg-slate-50 border-l border-slate-200">
+            <div className="w-1/2 overflow-auto p-4 bg-white border-l border-slate-200">
               <Stepper 
                 step={currentStep} 
                 stepIndex={currentStepIndex} 
@@ -59,7 +59,7 @@ export default function Home() {
           </ClientOnly>
         </div>
 
-        <div className="border-t border-slate-200 p-4">
+        <div className="border-t border-slate-200 p-4 bg-white">
           <ClientOnly>
             <SummaryChart nnState={nnState} />
           </ClientOnly>
