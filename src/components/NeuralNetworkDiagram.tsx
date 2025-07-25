@@ -74,10 +74,12 @@ const NeuralNetworkDiagram: React.FC<NeuralNetworkDiagramProps> = ({
       .attr('transform', `translate(${margin.left},${margin.top})`)
       .attr('class', 'nn-content');
 
-    // Define node positions in layers (input, hidden, output)
+    // Define node positions in layers (input, hidden, output, and bias layers)
     const layers = [
       { id: 'input', nodes: ['i1', 'i2'], x: 0.1 },
+      { id: 'input-bias', nodes: ['b0'], x: 0.2 },  // Bias node for input layer
       { id: 'hidden', nodes: ['h1', 'h2'], x: 0.5 },
+      { id: 'hidden-bias', nodes: ['b1'], x: 0.6 },  // Bias node for hidden layer
       { id: 'output', nodes: ['o1', 'o2'], x: 0.9 }
     ];
 
@@ -85,34 +87,65 @@ const NeuralNetworkDiagram: React.FC<NeuralNetworkDiagramProps> = ({
     const nodes: NodeData[] = [];
     layers.forEach((layer, layerIndex) => {
       layer.nodes.forEach((nodeId, i) => {
-        let value = '?';
+        let value = '1.0'; // Default for bias nodes
+        let label = nodeId;
+        
         if (nodeId.startsWith('i')) {
-          value = inputs[nodeId as keyof typeof inputs]?.toFixed(2) ?? '?';
+          // Input nodes
+          value = inputs[nodeId as keyof typeof inputs]?.toFixed(2) ?? '0.00';
         } else if (nodeId.startsWith('h') || nodeId.startsWith('o')) {
-          value = calculated[`out_${nodeId}` as keyof typeof calculated]?.toFixed(4) ?? '?';
+          // Hidden and output nodes
+          value = calculated[`out_${nodeId}` as keyof typeof calculated]?.toFixed(4) ?? '0.0000';
+        } else if (nodeId.startsWith('b')) {
+          // Bias nodes (b1 for hidden layer, b2 for output layer)
+          label = 'b';
+          // Set value to 1.0 for bias nodes (bias is always 1, weight is what changes)
+          value = '1.0';
+        }
+
+        // Adjust y-position for bias nodes to be centered vertically
+        let yPos;
+        if (nodeId.startsWith('b')) {
+          // Position bias nodes in the middle of their layer
+          yPos = height / 2;
+        } else {
+          // Position regular nodes with equal spacing
+          const nodeIndex = layer.nodes.indexOf(nodeId);
+          yPos = ((nodeIndex + 1) / (layer.nodes.length + 1)) * height;
         }
 
         nodes.push({
           id: nodeId,
           x: layer.x * width,
-          y: ((i + 1) / (layer.nodes.length + 1)) * height,
+          y: yPos,
           layer: layerIndex,
           value,
-          label: nodeId
+          label
         });
       });
     });
 
     // Create links data
     const links: LinkData[] = [
+      // Input to Hidden layer connections
       { source: 'i1', target: 'h1', weight: 'w1', value: weights.w1 },
       { source: 'i1', target: 'h2', weight: 'w3', value: weights.w3 },
       { source: 'i2', target: 'h1', weight: 'w2', value: weights.w2 },
       { source: 'i2', target: 'h2', weight: 'w4', value: weights.w4 },
+      
+      // Input bias connections (b0 to hidden nodes) - using b1 and b2 from weights
+      { source: 'b0', target: 'h1', weight: 'b1', value: weights.b1 },
+      { source: 'b0', target: 'h2', weight: 'b2', value: weights.b2 },
+      
+      // Hidden to Output layer connections
       { source: 'h1', target: 'o1', weight: 'w5', value: weights.w5 },
       { source: 'h1', target: 'o2', weight: 'w7', value: weights.w7 },
       { source: 'h2', target: 'o1', weight: 'w6', value: weights.w6 },
       { source: 'h2', target: 'o2', weight: 'w8', value: weights.w8 },
+      
+      // Hidden bias connections (b1 to output nodes) - using b3 and b4 from weights
+      { source: 'b1', target: 'o1', weight: 'b3', value: weights.b3 },
+      { source: 'b1', target: 'o2', weight: 'b4', value: weights.b4 }
     ];
 
     // Draw links
@@ -169,9 +202,15 @@ const NeuralNetworkDiagram: React.FC<NeuralNetworkDiagramProps> = ({
 
     // Add node circles
     nodeElements.append('circle')
-      .attr('r', 30)
-      .style('fill', (d: NodeData) => highlight.nodes.includes(d.id) ? '#dbeafe' : '#f1f5f9')
-      .style('stroke', (d: NodeData) => highlight.nodes.includes(d.id) ? '#3b82f6' : '#94a3b8')
+      .attr('r', (d: NodeData) => d.id.startsWith('b') ? 20 : 30) // Smaller circles for bias nodes
+      .style('fill', (d: NodeData) => {
+        if (d.id.startsWith('b')) return '#fef3c7'; // Different color for bias nodes
+        return highlight.nodes.includes(d.id) ? '#dbeafe' : '#f1f5f9';
+      })
+      .style('stroke', (d: NodeData) => {
+        if (d.id.startsWith('b')) return '#d97706'; // Different border color for bias nodes
+        return highlight.nodes.includes(d.id) ? '#3b82f6' : '#94a3b8';
+      })
       .style('stroke-width', (d: NodeData) => highlight.nodes.includes(d.id) ? 2 : 1.5);
 
     // Add node labels
