@@ -9,6 +9,7 @@ interface StepperProps {
   onNext: () => void;
   onPrev: () => void;
   onReset: () => void;
+  onJumpToStep: (stepIndex: number) => void;
   nnState: NNState;
 }
 
@@ -58,8 +59,13 @@ const CalculationResult: React.FC<{ content: string }> = ({ content }) => {
   return <div dangerouslySetInnerHTML={{ __html: content }} />;
 };
 
-const Stepper: React.FC<StepperProps> = ({ step, stepIndex, totalSteps, onNext, onPrev, onReset, nnState }) => {
+const Stepper: React.FC<StepperProps> = ({ step, stepIndex, totalSteps, onNext, onPrev, onReset, onJumpToStep, nnState }) => {
   const { result } = step.calculation(nnState);
+  
+  // Jump to the start of backward pass (step 13, index 12)
+  const jumpToBackwardPass = () => {
+    onJumpToStep(12); // Index 12 is step 13 (0-based)
+  };
 
   return (
     <div className="flex flex-col h-full">
@@ -92,15 +98,29 @@ const Stepper: React.FC<StepperProps> = ({ step, stepIndex, totalSteps, onNext, 
       {/* Fixed position button bar at the bottom */}
       <div className="stepper-navigation">
         <div className="flex justify-between items-center px-4 py-3">
-          <button 
-            onClick={onReset}
-            className="button button-secondary flex items-center gap-1"
-          >
-            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-            </svg>
-            Reset
-          </button>
+          <div className="flex items-center gap-2">
+            <button 
+              onClick={onReset}
+              className="button button-secondary flex items-center gap-1"
+            >
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+              </svg>
+              Reset
+            </button>
+            {stepIndex < 12 && (
+              <button
+                onClick={jumpToBackwardPass}
+                className="button button-secondary flex items-center gap-1 px-3"
+                title="Jump to Backward Pass"
+              >
+                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 5l7 7-7 7M5 5l7 7-7 7" />
+                </svg>
+                <span>Backward_Pass</span>
+              </button>
+            )}
+          </div>
           
           <div className="flex items-center gap-1">
             <button 

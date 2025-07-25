@@ -30,6 +30,19 @@ export default function Home() {
     }
   };
 
+  const jumpToStep = (targetIndex: number) => {
+    if (targetIndex >= 0 && targetIndex < steps.length) {
+      // Calculate the state by applying all steps up to the target index
+      let currentState = INITIAL_STATE;
+      for (let i = 0; i <= targetIndex; i++) {
+        const { newState } = steps[i].calculation(currentState);
+        currentState = newState;
+      }
+      setNnState(currentState);
+      setCurrentStepIndex(targetIndex);
+    }
+  };
+
   const handleReset = () => {
     setNnState(INITIAL_STATE);
     setCurrentStepIndex(0);
@@ -65,6 +78,7 @@ export default function Home() {
                 onNext={handleNext} 
                 onPrev={handlePrev} 
                 onReset={handleReset}
+                onJumpToStep={jumpToStep}
                 nnState={nnState}
               />
             </div>
