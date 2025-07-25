@@ -75,25 +75,32 @@ const ExplanationContent: React.FC<{ content: string }> = ({ content }) => {
         return <h3 key={`p-${pIndex}`} className="text-lg font-semibold mt-6 mb-3">{trimmed.substring(3)}</h3>;
       }
       
-      // Regular text with possible inline LaTeX
-      const parts = paragraph.split(/(\$\$.*?\$\$|\$.*?\$)/);
-      const processedParts = parts.map((part, partIndex) => {
-        // Handle display math ($$...$$)
-        if (part.startsWith('$$') && part.endsWith('$$')) {
-          const latexContent = part.slice(2, -2).trim();
-          try {
-            const html = katex.renderToString(latexContent, {
-              throwOnError: false,
-              displayMode: true,
-            });
-            return <div key={`math-${pIndex}-${partIndex}`} dangerouslySetInnerHTML={{ __html: html }} className="my-2" />;
-          } catch (e) {
-            console.error('Error rendering LaTeX:', e);
-            return <span key={`math-${pIndex}-${partIndex}`}>{part}</span>;
-          }
+      // Check if this is a display math block (starts and ends with $$)
+      const paragraphTrimmed = paragraph.trim();
+      if (paragraphTrimmed.startsWith('$$') && paragraphTrimmed.endsWith('$$')) {
+        const latexContent = paragraphTrimmed.slice(2, -2).trim();
+        try {
+          const html = katex.renderToString(latexContent, {
+            throwOnError: false,
+            displayMode: true,
+          });
+          return (
+            <div key={`math-${pIndex}`} 
+                 className="my-4"
+                 dangerouslySetInnerHTML={{ __html: html }} 
+            />
+          );
+        } catch (e) {
+          console.error('Error rendering LaTeX:', e);
+          return <div key={`math-${pIndex}`} className="my-4">{paragraph}</div>;
         }
+      }
+
+      // Handle regular text with possible inline LaTeX
+      const parts = paragraph.split(/(\$[^$]+\$)/);
+      const processedParts = parts.map((part, partIndex) => {
         // Handle inline math ($...$)
-        else if (part.startsWith('$') && part.endsWith('$') && part.length > 1) {
+        if (part.startsWith('$') && part.endsWith('$') && part.length > 1) {
           const latexContent = part.slice(1, -1).trim();
           try {
             const html = katex.renderToString(latexContent, {
