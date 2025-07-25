@@ -36,6 +36,28 @@ const KatexComponent: React.FC<{ formula: string }> = ({ formula }) => {
   return <div dangerouslySetInnerHTML={{ __html: html }} />;
 };
 
+// Component to render calculation results with LaTeX support
+const CalculationResult: React.FC<{ content: string }> = ({ content }) => {
+  // Check if the content is wrapped in $$ (LaTeX display mode)
+  if (content.trim().startsWith('$$') && content.trim().endsWith('$$')) {
+    const latexContent = content.trim().slice(2, -2); // Remove the $$ delimiters
+    try {
+      // Render as LaTeX in display mode
+      const html = katex.renderToString(latexContent, {
+        throwOnError: false,
+        displayMode: true,
+      });
+      return <div dangerouslySetInnerHTML={{ __html: html }} className="text-center" />;
+    } catch (e) {
+      console.error('Error rendering LaTeX:', e);
+      return <div>{content}</div>;
+    }
+  }
+  
+  // If not LaTeX, render as plain HTML
+  return <div dangerouslySetInnerHTML={{ __html: content }} />;
+};
+
 const Stepper: React.FC<StepperProps> = ({ step, stepIndex, totalSteps, onNext, onPrev, onReset, nnState }) => {
   const { result } = step.calculation(nnState);
 
@@ -53,8 +75,8 @@ const Stepper: React.FC<StepperProps> = ({ step, stepIndex, totalSteps, onNext, 
 
           <div className="calc-box p-6 bg-white rounded-lg shadow-sm border border-gray-200">
             <h3 className="font-semibold text-lg mb-4 text-slate-700">Live Calculation</h3>
-            <div className="p-4 bg-gray-50 rounded">
-              <div dangerouslySetInnerHTML={{ __html: result }} />
+            <div className="p-4 bg-gray-50 rounded flex justify-center">
+              <CalculationResult content={result} />
             </div>
           </div>
 

@@ -22,7 +22,7 @@ export const steps: Step[] = [
       const { b1 } = state.biases;
       const net_h1 = (w1 * i1) + (w2 * i2) + b1;
       const newState = { ...state, calculated: { ...state.calculated, net_h1 } };
-      return { result: `(${w1} * ${i1}) + (${w2} * ${i2}) + ${b1} = ${net_h1.toFixed(4)}`, newState };
+      return { result: `$$net_{h1} = (${w1} \\times ${i1}) + (${w2} \\times ${i2}) + ${b1} = ${net_h1.toFixed(4)}$$`, newState };
     },
     highlight: { nodes: ['i1', 'i2', 'h1', 'b0'], weights: ['w1', 'w2', 'b1'] },
   },
@@ -33,7 +33,7 @@ export const steps: Step[] = [
     calculation: (state) => {
       const out_h1 = 1 / (1 + Math.exp(-state.calculated.net_h1));
       const newState = { ...state, calculated: { ...state.calculated, out_h1 } };
-      return { result: `1 / (1 + e<sup>-${state.calculated.net_h1.toFixed(4)}</sup>) = ${out_h1.toFixed(7)}`, newState };
+      return { result: `$$out_{h1} = \\frac{1}{1 + e^{${-state.calculated.net_h1.toFixed(4)}}} = ${out_h1.toFixed(7)}$$`, newState };
     },
     highlight: { nodes: ['h1'], weights: [] },
   },
@@ -47,7 +47,7 @@ export const steps: Step[] = [
       const { b1 } = state.biases;
       const net_h2 = (w3 * i1) + (w4 * i2) + b1;
       const newState = { ...state, calculated: { ...state.calculated, net_h2 } };
-      return { result: `(${w3} * ${i1}) + (${w4} * ${i2}) + ${b1} = ${net_h2.toFixed(4)}`, newState };
+      return { result: `$$net_{h2} = (${w3} \\times ${i1}) + (${w4} \\times ${i2}) + ${b1} = ${net_h2.toFixed(4)}$$`, newState };
     },
     highlight: { nodes: ['i1', 'i2', 'h2', 'b0'], weights: ['w3', 'w4', 'b2'] },
   },
@@ -58,7 +58,7 @@ export const steps: Step[] = [
     calculation: (state) => {
       const out_h2 = 1 / (1 + Math.exp(-state.calculated.net_h2));
       const newState = { ...state, calculated: { ...state.calculated, out_h2 } };
-      return { result: `1 / (1 + e<sup>-${state.calculated.net_h2.toFixed(4)}</sup>) = ${out_h2.toFixed(7)}`, newState };
+      return { result: `$$out_{h2} = \\frac{1}{1 + e^{${-state.calculated.net_h2.toFixed(4)}}} = ${out_h2.toFixed(7)}$$`, newState };
     },
     highlight: { nodes: ['h2'], weights: [] },
   },
@@ -72,7 +72,7 @@ export const steps: Step[] = [
       const { out_h1, out_h2 } = state.calculated;
       const net_o1 = (w5 * out_h1) + (w6 * out_h2) + b2;
       const newState = { ...state, calculated: { ...state.calculated, net_o1 } };
-      return { result: `(${w5} * ${out_h1.toFixed(3)}) + (${w6} * ${out_h2.toFixed(3)}) + ${b2} = ${net_o1.toFixed(4)}`, newState };
+      return { result: `$$net_{o1} = (${w5} \\times ${out_h1.toFixed(4)}) + (${w6} \\times ${out_h2.toFixed(4)}) + ${b2} = ${net_o1.toFixed(4)}$$`, newState };
     },
     highlight: { nodes: ['h1', 'h2', 'o1', 'b1'], weights: ['w5', 'w6', 'b3'] },
   },
@@ -83,7 +83,7 @@ export const steps: Step[] = [
     calculation: (state) => {
       const out_o1 = 1 / (1 + Math.exp(-state.calculated.net_o1));
       const newState = { ...state, calculated: { ...state.calculated, out_o1 } };
-      return { result: `1 / (1 + e<sup>-${state.calculated.net_o1.toFixed(4)}</sup>) = ${out_o1.toFixed(7)}`, newState };
+      return { result: `$$out_{o1} = \\frac{1}{1 + e^{${-state.calculated.net_o1.toFixed(4)}}} = ${out_o1.toFixed(7)}$$`, newState };
     },
     highlight: { nodes: ['o1'], weights: [] },
   },
@@ -97,7 +97,7 @@ export const steps: Step[] = [
       const { out_h1, out_h2 } = state.calculated;
       const net_o2 = (w7 * out_h1) + (w8 * out_h2) + b2;
       const newState = { ...state, calculated: { ...state.calculated, net_o2 } };
-      return { result: `(${w7} * ${out_h1.toFixed(3)}) + (${w8} * ${out_h2.toFixed(3)}) + ${b2} = ${net_o2.toFixed(4)}`, newState };
+      return { result: `$$net_{o2} = (${w7} \\times ${out_h1.toFixed(4)}) + (${w8} \\times ${out_h2.toFixed(4)}) + ${b2} = ${net_o2.toFixed(4)}$$`, newState };
     },
     highlight: { nodes: ['h1', 'h2', 'o2', 'b1'], weights: ['w7', 'w8', 'b4'] },
   },
@@ -108,7 +108,7 @@ export const steps: Step[] = [
     calculation: (state) => {
       const out_o2 = 1 / (1 + Math.exp(-state.calculated.net_o2));
       const newState = { ...state, calculated: { ...state.calculated, out_o2 } };
-      return { result: `1 / (1 + e<sup>-${state.calculated.net_o2.toFixed(4)}</sup>) = ${out_o2.toFixed(7)}`, newState };
+      return { result: `$$out_{o2} = \\frac{1}{1 + e^{${-state.calculated.net_o2.toFixed(4)}}} = ${out_o2.toFixed(7)}$$`, newState };
     },
     highlight: { nodes: ['o2'], weights: [] },
   },
@@ -122,7 +122,7 @@ export const steps: Step[] = [
       const { out_o1 } = state.calculated;
       const E_o1 = 0.5 * Math.pow(o1 - out_o1, 2);
       const newState = { ...state, calculated: { ...state.calculated, E_o1 } };
-      return { result: `0.5 * (${o1} - ${out_o1.toFixed(4)})² = ${E_o1.toFixed(7)}`, newState };
+      return { result: `$$E_{o1} = 0.5 \\times (${o1} - ${out_o1.toFixed(7)})^2 = ${E_o1.toFixed(7)}$$`, newState };
     },
     highlight: { nodes: ['o1'], weights: [] },
   },
@@ -135,7 +135,7 @@ export const steps: Step[] = [
       const { out_o2 } = state.calculated;
       const E_o2 = 0.5 * Math.pow(o2 - out_o2, 2);
       const newState = { ...state, calculated: { ...state.calculated, E_o2 } };
-      return { result: `0.5 * (${o2} - ${out_o2.toFixed(4)})² = ${E_o2.toFixed(7)}`, newState };
+      return { result: `$$E_{o2} = 0.5 \\times (${o2} - ${out_o2.toFixed(7)})^2 = ${E_o2.toFixed(7)}$$`, newState };
     },
     highlight: { nodes: ['o2'], weights: [] },
   },
@@ -147,7 +147,7 @@ export const steps: Step[] = [
       const { E_o1, E_o2 } = state.calculated;
       const E_total = E_o1 + E_o2;
       const newState = { ...state, calculated: { ...state.calculated, E_total, initialError: E_total } };
-      return { result: `${E_o1.toFixed(4)} + ${E_o2.toFixed(4)} = ${E_total.toFixed(7)}`, newState };
+      return { result: `$$E_{total} = ${E_o1.toFixed(4)} + ${E_o2.toFixed(4)} = ${E_total.toFixed(7)}$$`, newState };
     },
     highlight: { nodes: ['o1', 'o2'], weights: [] },
   },
@@ -165,7 +165,7 @@ export const steps: Step[] = [
       const dE_dw5 = dE_douto1 * douto1_dneto1 * dneto1_dw5;
       const delta_o1 = dE_douto1 * douto1_dneto1;
       const newState = { ...state, calculated: { ...state.calculated, dE_dw5, delta_o1 } };
-      return { result: `Gradient for w5 = ${dE_dw5.toFixed(7)}`, newState };
+      return { result: `$$\\frac{\\partial E_{total}}{\\partial w_5} = ${dE_douto1.toFixed(4)} \\times ${douto1_dneto1.toFixed(4)} \\times ${dneto1_dw5.toFixed(4)} = ${dE_dw5.toFixed(7)}$$`, newState };
     },
     highlight: { nodes: ['o1', 'h1'], weights: ['w5'] },
   },
