@@ -154,8 +154,58 @@ export const steps: Step[] = [
   // Backward Pass
   {
     title: 'Backward Pass: Gradient for w5',
-    explanation: 'Now the \'learning\' begins. We go backward, updating weights to reduce the error. We use the chain rule to find how much the total error changes with respect to each weight. Let\'s start with w5.',
-    formula: `$$\\frac{\\partial E_{total}}{\\partial w_5} = \\frac{\\partial E_{total}}{\\partial out_{o1}} \\cdot \\frac{\\partial out_{o1}}{\\partial net_{o1}} \\cdot \\frac{\\partial net_{o1}}{\\partial w_5}$$`,
+    explanation: `The backward pass is where the actual learning happens through backpropagation. We'll calculate how much a change in each weight affects the total error using the chain rule of calculus. Let's start with weight w5.
+
+## Step 1: Calculate the partial derivative of total error with respect to out_o1
+
+We'll use the mean squared error function:
+
+$$
+E_{total} = \\frac{1}{2}(target_{o1} - out_{o1})^2 + \\frac{1}{2}(target_{o2} - out_{o2})^2
+$$
+
+The partial derivative is:
+
+$$
+\\frac{\\partial E_{total}}{\\partial out_{o1}} = -(target_{o1} - out_{o1}) = out_{o1} - target_{o1}
+$$
+
+## Step 2: Calculate the derivative of out_o1 with respect to net_o1
+
+Since we're using the sigmoid activation function:
+
+$$
+out_{o1} = \\frac{1}{1 + e^{-net_{o1}}}
+$$
+
+The derivative is:
+
+$$
+\\frac{\\partial out_{o1}}{\\partial net_{o1}} = out_{o1}(1 - out_{o1})
+$$
+
+## Step 3: Calculate the partial derivative of net_o1 with respect to w5
+
+$$
+net_{o1} = w_5 \\cdot out_{h1} + w_6 \\cdot out_{h2} + b_2 \\cdot 1
+$$
+
+$$
+\\frac{\\partial net_{o1}}{\\partial w_5} = out_{h1}
+$$
+
+## Final Gradient Calculation
+
+Putting it all together using the chain rule:
+
+$$
+\\frac{\\partial E_{total}}{\\partial w_5} = \\frac{\\partial E_{total}}{\\partial out_{o1}} \\cdot \\frac{\\partial out_{o1}}{\\partial net_{o1}} \\cdot \\frac{\\partial net_{o1}}{\\partial w_5}
+$$
+
+This gives us the gradient we'll use to update weight w5.`,
+    formula: `$$
+\\frac{\\partial E_{total}}{\\partial w_5} = \\frac{\\partial E_{total}}{\\partial out_{o1}} \\cdot \\frac{\\partial out_{o1}}{\\partial net_{o1}} \\cdot \\frac{\\partial net_{o1}}{\\partial w_5} = (out_{o1} - target_{o1}) \\cdot out_{o1}(1 - out_{o1}) \\cdot out_{h1}
+$$`,
     calculation: (state) => {
       const { out_o1, out_h1 } = state.calculated;
       const { o1 } = state.targets;

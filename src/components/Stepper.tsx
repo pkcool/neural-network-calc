@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { Step, NNState } from '@/types';
 import katex from 'katex';
+import 'katex/dist/katex.min.css';
 
 interface StepperProps {
   step: Step;
@@ -35,6 +36,80 @@ const KatexComponent: React.FC<{ formula: string }> = ({ formula }) => {
   }, [formula]);
 
   return <div dangerouslySetInnerHTML={{ __html: html }} />;
+};
+
+// Component to render calculation results with LaTeX support
+// Component to render explanation text with LaTeX and markdown support
+const ExplanationContent: React.FC<{ content: string }> = ({ content }) => {
+  const renderedContent = useMemo(() => {
+    // First split by double newlines to handle paragraphs
+    const paragraphs = content.split(/\n\s*\n/);
+    
+    return paragraphs.map((paragraph, pIndex) => {
+      // Check if this paragraph is a LaTeX block
+      const trimmed = paragraph.trim();
+      if (trimmed.startsWith('$$') && trimmed.endsWith('$$')) {
+        const latexContent = trimmed.slice(2, -2).trim();
+        try {
+          const html = katex.renderToString(latexContent, {
+            throwOnError: false,
+            displayMode: true,
+          });
+          return (
+            <div key={`p-${pIndex}`} className="my-4">
+              <div dangerouslySetInnerHTML={{ __html: html }} className="overflow-x-auto" />
+            </div>
+          );
+        } catch (e) {
+          console.error('Error rendering LaTeX:', e);
+          return <div key={`p-${pIndex}`} className="my-4">{paragraph}</div>;
+        }
+      }
+      
+      // Handle markdown headers (## Header)
+      if (trimmed.startsWith('## ')) {
+        return <h3 key={`p-${pIndex}`} className="text-lg font-semibold mt-6 mb-3">{trimmed.substring(3)}</h3>;
+      }
+      
+      // Regular text with possible inline LaTeX
+      const parts = paragraph.split(/(\$\$.*?\$\$|\$.*?\$)/);
+      const processedParts = parts.map((part, partIndex) => {
+        // Handle display math ($$...$$)
+        if (part.startsWith('$$') && part.endsWith('$$')) {
+          const latexContent = part.slice(2, -2).trim();
+          try {
+            const html = katex.renderToString(latexContent, {
+              throwOnError: false,
+              displayMode: true,
+            });
+            return <div key={`math-${pIndex}-${partIndex}`} dangerouslySetInnerHTML={{ __html: html }} className="my-2" />;
+          } catch (e) {
+            console.error('Error rendering LaTeX:', e);
+            return <span key={`math-${pIndex}-${partIndex}`}>{part}</span>;
+          }
+        }
+        // Handle inline math ($...$)
+        else if (part.startsWith('$') && part.endsWith('$') && part.length > 1) {
+          const latexContent = part.slice(1, -1).trim();
+          try {
+            const html = katex.renderToString(latexContent, {
+              throwOnError: false,
+              displayMode: false,
+            });
+            return <span key={`inline-${pIndex}-${partIndex}`} dangerouslySetInnerHTML={{ __html: html }} />;
+          } catch (e) {
+            console.error('Error rendering inline LaTeX:', e);
+            return <span key={`inline-${pIndex}-${partIndex}`}>{part}</span>;
+          }
+        }
+        return part;
+      });
+      
+      return <p key={`p-${pIndex}`} className="mb-4">{processedParts}</p>;
+    });
+  }, [content]);
+
+  return <div className="max-w-none">{renderedContent}</div>;
 };
 
 // Component to render calculation results with LaTeX support
@@ -89,8 +164,8 @@ const Stepper: React.FC<StepperProps> = ({ step, stepIndex, totalSteps, onNext, 
           {step.explanation && (
             <div className="calc-box p-6 bg-white rounded-lg shadow-sm border border-gray-200">
               <h3 className="font-semibold text-lg mb-4 text-slate-700">Explanation</h3>
-              <div className="p-4 bg-gray-50 rounded">
-                <p className="text-slate-600 leading-relaxed">{step.explanation}</p>
+              <div className="p-4 bg-gray-50 rounded text-slate-600 leading-relaxed">
+                <ExplanationContent content={step.explanation} />
               </div>
             </div>
           )}
