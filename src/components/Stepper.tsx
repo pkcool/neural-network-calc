@@ -87,9 +87,11 @@ const Stepper: React.FC<StepperProps> = ({ step, stepIndex, totalSteps, onNext, 
           </div>
 
           {step.explanation && (
-            <div className="prose max-w-none">
-              <h3 className="text-lg font-semibold text-slate-700 mb-3">Explanation</h3>
-              <p className="text-slate-600 leading-relaxed">{step.explanation}</p>
+            <div className="calc-box p-6 bg-white rounded-lg shadow-sm border border-gray-200">
+              <h3 className="font-semibold text-lg mb-4 text-slate-700">Explanation</h3>
+              <div className="p-4 bg-gray-50 rounded">
+                <p className="text-slate-600 leading-relaxed">{step.explanation}</p>
+              </div>
             </div>
           )}
         </div>
