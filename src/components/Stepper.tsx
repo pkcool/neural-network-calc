@@ -66,8 +66,12 @@ const ExplanationContent: React.FC<{ content: string }> = ({ content }) => {
         }
       }
       
+      // Handle markdown headers (### Header)
+      if (trimmed.startsWith('### ')) {
+        return <h4 key={`p-${pIndex}`} className="text-md font-semibold mt-5 mb-2">{trimmed.substring(4)}</h4>;
+      }
       // Handle markdown headers (## Header)
-      if (trimmed.startsWith('## ')) {
+      else if (trimmed.startsWith('## ')) {
         return <h3 key={`p-${pIndex}`} className="text-lg font-semibold mt-6 mb-3">{trimmed.substring(3)}</h3>;
       }
       
@@ -162,7 +166,7 @@ const Stepper: React.FC<StepperProps> = ({ step, stepIndex, totalSteps, onNext, 
           </div>
 
           {step.explanation && (
-            <div className="calc-box p-6 bg-white rounded-lg shadow-sm border border-gray-200">
+            <div className="math-container p-6 bg-white rounded-lg shadow-sm border border-gray-200">
               <h3 className="font-semibold text-lg mb-4 text-slate-700">Explanation</h3>
               <div className="p-4 bg-gray-50 rounded text-slate-600 leading-relaxed">
                 <ExplanationContent content={step.explanation} />

@@ -156,6 +156,10 @@ export const steps: Step[] = [
     title: 'Backward Pass: Gradient for w5',
     explanation: `The backward pass is where the actual learning happens through backpropagation. We'll calculate how much a change in each weight affects the total error using the chain rule of calculus. Let's start with weight w5.
 
+### Understanding the Notation
+
+The expression $$\\frac{\\partial E_{total}}{\\partial w_{5}}$$ is read as "the partial derivative of $E_{total}$ with respect to $w_{5}$". You can also say "the gradient with respect to $w_{5}$". This tells us how much the total error changes as we adjust the weight $w_{5}$, with all other weights held constant. Our goal is to find this value so we can adjust $w_{5}$ to minimize the total error.
+
 ## Step 1: Calculate the partial derivative of total error with respect to out_o1
 
 We'll use the mean squared error function:
