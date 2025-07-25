@@ -30,6 +30,11 @@ export default function Home() {
     }
   };
 
+  const handleReset = () => {
+    setNnState(INITIAL_STATE);
+    setCurrentStepIndex(0);
+  };
+
   const currentStep = steps[currentStepIndex];
 
   return (
@@ -59,6 +64,7 @@ export default function Home() {
                 totalSteps={steps.length} 
                 onNext={handleNext} 
                 onPrev={handlePrev} 
+                onReset={handleReset}
                 nnState={nnState}
               />
             </div>
