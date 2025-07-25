@@ -14,7 +14,7 @@ export const steps: Step[] = [
   // Forward Pass
   {
     title: 'Forward Pass: Net Input for h1',
-    explanation: 'First, we calculate the total net input for the first hidden neuron, $h_1$. This is a weighted sum of the inputs plus the bias.',
+    explanation: 'First, we calculate the total net input for the first hidden neuron, h1. This is a weighted sum of the inputs plus the bias.',
     formula: `$$net_{h1} = w_1 \\cdot i_1 + w_2 \\cdot i_2 + b_1 \\cdot 1$$`,
     calculation: (state) => {
       const { w1, w2 } = state.weights;
@@ -39,7 +39,7 @@ export const steps: Step[] = [
   },
   {
     title: 'Forward Pass: Net Input for h2',
-    explanation: 'We do the same for the second hidden neuron, $h_2$.',
+    explanation: 'We do the same for the second hidden neuron, h2.',
     formula: `$$net_{h2} = w_3 \\cdot i_1 + w_4 \\cdot i_2 + b_1 \\cdot 1$$`,
     calculation: (state) => {
       const { w3, w4 } = state.weights;
@@ -53,7 +53,7 @@ export const steps: Step[] = [
   },
   {
     title: 'Forward Pass: Output of h2',
-    explanation: 'And again, we squash the net input for $h_2$ to get its output.',
+    explanation: 'And again, we squash the net input for h2 to get its output.',
     formula: `$$out_{h2} = \\frac{1}{1 + e^{-net_{h2}}}$$`,
     calculation: (state) => {
       const out_h2 = 1 / (1 + Math.exp(-state.calculated.net_h2));
@@ -64,7 +64,7 @@ export const steps: Step[] = [
   },
   {
     title: 'Forward Pass: Net Input for o1',
-    explanation: 'Now we move to the output layer. The inputs for this layer are the outputs from the hidden layer ($out_{h1}, out_{h2}$).',
+    explanation: 'Now we move to the output layer. The inputs for this layer are the outputs from the hidden layer (out_h1, out_h2).',
     formula: `$$net_{o1} = w_5 \\cdot out_{h1} + w_6 \\cdot out_{h2} + b_2 \\cdot 1$$`,
     calculation: (state) => {
       const { w5, w6 } = state.weights;
@@ -78,7 +78,7 @@ export const steps: Step[] = [
   },
   {
     title: 'Forward Pass: Output of o1',
-    explanation: 'We get the final output of the first output neuron, $o_1$. This is one of the network\'s predictions.',
+    explanation: 'We get the final output of the first output neuron, o1. This is one of the network\'s predictions.',
     formula: `$$out_{o1} = \\frac{1}{1 + e^{-net_{o1}}}$$`,
     calculation: (state) => {
       const out_o1 = 1 / (1 + Math.exp(-state.calculated.net_o1));
@@ -89,7 +89,7 @@ export const steps: Step[] = [
   },
   {
     title: 'Forward Pass: Net Input for o2',
-    explanation: 'We repeat the process for the second output neuron, $o_2$.',
+    explanation: 'We repeat the process for the second output neuron, o2.',
     formula: `$$net_{o2} = w_7 \\cdot out_{h1} + w_8 \\cdot out_{h2} + b_2 \\cdot 1$$`,
     calculation: (state) => {
       const { w7, w8 } = state.weights;
@@ -103,7 +103,7 @@ export const steps: Step[] = [
   },
   {
     title: 'Forward Pass: Output of o2',
-    explanation: 'And we get the final prediction from the second output neuron, $o_2$.',
+    explanation: 'And we get the final prediction from the second output neuron, o2.',
     formula: `$$out_{o2} = \\frac{1}{1 + e^{-net_{o2}}}$$`,
     calculation: (state) => {
       const out_o2 = 1 / (1 + Math.exp(-state.calculated.net_o2));
@@ -115,7 +115,7 @@ export const steps: Step[] = [
   // Error Calculation
   {
     title: 'Error Calculation: E_o1',
-    explanation: 'Now that we have the predictions, we can calculate how \'wrong\' they are. We use the squared error formula. First, for $o_1$.',
+    explanation: 'For each output neuron, we calculate the error between the actual output and the target output. For o1, we use the mean squared error formula. First, for o1.',
     formula: `$$E_{o1} = \\frac{1}{2}(target_{o1} - out_{o1})^2$$`,
     calculation: (state) => {
       const { o1 } = state.targets;
@@ -128,7 +128,7 @@ export const steps: Step[] = [
   },
   {
     title: 'Error Calculation: E_o2',
-    explanation: 'Then we calculate the error for $o_2$.',
+    explanation: 'Then we calculate the error for o2.',
     formula: `$$E_{o2} = \\frac{1}{2}(target_{o2} - out_{o2})^2$$`,
     calculation: (state) => {
       const { o2 } = state.targets;
@@ -154,7 +154,7 @@ export const steps: Step[] = [
   // Backward Pass
   {
     title: 'Backward Pass: Gradient for w5',
-    explanation: 'Now the \'learning\' begins. We go backward, updating weights to reduce the error. We use the chain rule to find how much the total error changes with respect to each weight. Let\'s start with $w_5$.',
+    explanation: 'Now the \'learning\' begins. We go backward, updating weights to reduce the error. We use the chain rule to find how much the total error changes with respect to each weight. Let\'s start with w5.',
     formula: `$$\\frac{\\partial E_{total}}{\\partial w_5} = \\frac{\\partial E_{total}}{\\partial out_{o1}} \\cdot \\frac{\\partial out_{o1}}{\\partial net_{o1}} \\cdot \\frac{\\partial net_{o1}}{\\partial w_5}$$`,
     calculation: (state) => {
       const { out_o1, out_h1 } = state.calculated;
@@ -171,7 +171,7 @@ export const steps: Step[] = [
   },
   {
     title: 'Backward Pass: Update w5',
-    explanation: 'We update the weight by moving it in the opposite direction of the gradient, scaled by a learning rate $\\eta$ (here, 0.5).',
+    explanation: 'We update the weight by moving it in the opposite direction of the gradient, scaled by a learning rate η (here, 0.5).',
     formula: `$$w_5^{new} = w_5 - \\eta \\cdot \\frac{\\partial E_{total}}{\\partial w_5}$$`,
     calculation: (state) => {
       const w5_new = state.weights.w5 - state.learningRate * state.calculated.dE_dw5;
@@ -183,7 +183,7 @@ export const steps: Step[] = [
   },
   {
     title: 'Backward Pass: Update w6, w7, w8',
-    explanation: 'We repeat the same process for the other weights in the output layer ($w_6, w_7, w_8$). The calculations follow the same chain rule logic.',
+    explanation: 'We repeat the same process for the other weights in the output layer (w6, w7, w8). The calculations follow the same chain rule logic.',
     formula: `$$w_6^{new} = w_6 - \\eta \\cdot \\delta_{o1} \\cdot out_{h2} \\\\ w_7^{new} = w_7 - \\eta \\cdot \\delta_{o2} \\cdot out_{h1} \\\\ w_8^{new} = w_8 - \\eta \\cdot \\delta_{o2} \\cdot out_{h2}$$`,
     calculation: (state) => {
       const { out_o2, out_h1, out_h2, delta_o1 } = state.calculated;
@@ -210,7 +210,7 @@ export const steps: Step[] = [
   },
   {
     title: 'Backward Pass: Gradient for w1',
-    explanation: 'For the hidden layer weights, the process is similar but more complex. The error from a hidden neuron ($h_1$) is distributed across all output neurons it connects to ($o_1, o_2$). We sum its error contribution from each.',
+    explanation: 'For the hidden layer weights, the process is similar but more complex. The error from a hidden neuron (h1) is distributed across all output neurons it connects to (o1, o2). We sum its error contribution from each.',
     formula: `$$\\frac{\\partial E_{total}}{\\partial w_1} = (\\sum_{k} \\frac{\\partial E_{total}}{\\partial out_k} \\frac{\\partial out_k}{\\partial net_k} \\frac{\\partial net_k}{\\partial out_{h1}}) \\cdot \\frac{\\partial out_{h1}}{\\partial net_{h1}} \\cdot \\frac{\\partial net_{h1}}{\\partial w_1}$$`,
     calculation: (state) => {
       const { delta_o1, delta_o2, out_h1 } = state.calculated;
