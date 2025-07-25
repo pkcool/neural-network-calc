@@ -24,7 +24,7 @@ export const steps: Step[] = [
       const newState = { ...state, calculated: { ...state.calculated, net_h1 } };
       return { result: `(${w1} * ${i1}) + (${w2} * ${i2}) + ${b1} = ${net_h1.toFixed(4)}`, newState };
     },
-    highlight: { nodes: ['i1', 'i2', 'h1'], weights: ['w1', 'w2'] },
+    highlight: { nodes: ['i1', 'i2', 'h1', 'b0'], weights: ['w1', 'w2', 'b1'] },
   },
   {
     title: 'Forward Pass: Output of h1',
@@ -49,7 +49,7 @@ export const steps: Step[] = [
       const newState = { ...state, calculated: { ...state.calculated, net_h2 } };
       return { result: `(${w3} * ${i1}) + (${w4} * ${i2}) + ${b1} = ${net_h2.toFixed(4)}`, newState };
     },
-    highlight: { nodes: ['i1', 'i2', 'h2'], weights: ['w3', 'w4'] },
+    highlight: { nodes: ['i1', 'i2', 'h2', 'b0'], weights: ['w3', 'w4', 'b2'] },
   },
   {
     title: 'Forward Pass: Output of h2',
@@ -74,7 +74,7 @@ export const steps: Step[] = [
       const newState = { ...state, calculated: { ...state.calculated, net_o1 } };
       return { result: `(${w5} * ${out_h1.toFixed(3)}) + (${w6} * ${out_h2.toFixed(3)}) + ${b2} = ${net_o1.toFixed(4)}`, newState };
     },
-    highlight: { nodes: ['h1', 'h2', 'o1'], weights: ['w5', 'w6'] },
+    highlight: { nodes: ['h1', 'h2', 'o1', 'b1'], weights: ['w5', 'w6', 'b3'] },
   },
   {
     title: 'Forward Pass: Output of o1',
@@ -99,7 +99,7 @@ export const steps: Step[] = [
       const newState = { ...state, calculated: { ...state.calculated, net_o2 } };
       return { result: `(${w7} * ${out_h1.toFixed(3)}) + (${w8} * ${out_h2.toFixed(3)}) + ${b2} = ${net_o2.toFixed(4)}`, newState };
     },
-    highlight: { nodes: ['h1', 'h2', 'o2'], weights: ['w7', 'w8'] },
+    highlight: { nodes: ['h1', 'h2', 'o2', 'b1'], weights: ['w7', 'w8', 'b4'] },
   },
   {
     title: 'Forward Pass: Output of o2',
