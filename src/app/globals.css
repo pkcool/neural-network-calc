@@ -2,17 +2,111 @@
 @tailwind components;
 @tailwind utilities;
 
+html, body, #__next {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
 body {
     font-family: 'Inter', sans-serif;
-    background-color: #f8fafc; /* slate-50 */
+    background-color: #ffffff; /* white */
     color: #1e293b; /* slate-800 */
 }
-.math-container {
+
+/* Ensure all main containers have white background */
+#__next > div {
+    background-color: #ffffff;
+    min-height: 100%;
+}
+.math-container,
+.calc-box {
     font-size: 1.1rem;
     padding: 1rem;
-    background-color: #f1f5f9; /* slate-100 */
+    background-color: #f8fafc; /* slate-50 - light background */
     border-radius: 0.5rem;
     overflow-x: auto;
+    color: #1e293b; /* slate-800 - dark text */
+    border: 1px solid #e2e8f0; /* slate-200 - subtle border */
+}
+
+/* Force KaTeX to use dark text */
+.katex,
+.katex .katex-html {
+    color: #1e293b; /* slate-800 */
+}
+
+/* Force all KaTeX elements to use dark text */
+.katex .mord,
+.katex .mrel,
+.katex .mclose,
+.katex .mop,
+.katex .mopen,
+.katex .mord > .mord,
+.katex .mrel > .mrel,
+.katex .mclose > .mclose,
+.katex .mop > .mop,
+.katex .mopen > .mopen {
+    color: inherit !important;
+}
+
+/* Button Styles */
+.button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    padding: 0.4rem 1rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+    line-height: 1.25;
+    border-radius: 0.25rem;
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+    border: 1px solid transparent;
+    min-width: 90px;
+    height: 36px;
+    box-sizing: border-box;
+}
+
+.button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.button-primary {
+    background-color: #2563eb;
+    color: white;
+    border-color: #2563eb;
+}
+
+.button-primary:hover:not(:disabled) {
+    background-color: #1d4ed8;
+    border-color: #1d4ed8;
+}
+
+.button-secondary {
+    background-color: white;
+    color: #2563eb;
+    border-color: #d1d5db;
+}
+
+.button-secondary:hover:not(:disabled) {
+    background-color: #f3f4f6;
+    border-color: #9ca3af;
+}
+
+/* Stepper Navigation */
+.stepper-navigation {
+    position: sticky;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: white;
+    border-top: 1px solid #e5e7eb;
+    padding: 1rem 1.5rem;
+    margin: 0 -1.5rem -1.5rem -1.5rem;
+    z-index: 10;
 }
 .calc-box {
     background-color: #e2e8f0; /* slate-200 */
@@ -20,6 +114,32 @@ body {
     border-radius: 0.5rem;
     border: 1px solid #cbd5e1; /* slate-300 */
     transition: all 0.3s ease-in-out;
+}
+
+.explanation-container {
+    background-color: #ffffff;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    border: 1px solid #e2e8f0;
+}
+
+.explanation-container h3 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 1rem;
+}
+
+.explanation-container .explanation-content {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #475569;
+}
+
+.explanation-container .explanation-content p {
+    margin-bottom: 1rem;
 }
 .calc-title {
     font-weight: 600;
@@ -41,7 +161,7 @@ body {
     height: 5rem;
     border-radius: 50%;
     background-color: #ffffff;
-    border: 2px solid #94a3b8; /* slate-400 */
+    border: 3px solid red; /* DEBUG: strong visible border */
     font-weight: 500;
     font-size: 0.9rem;
     transition: all 0.3s ease-in-out;
@@ -49,6 +169,14 @@ body {
     transform: translate(-50%, -50%); /* Center the node */
     z-index: 10;
 }
+
+#nn-diagram-container {
+    position: relative;
+    min-height: 24rem;
+    height: 24rem;
+    width: 100%;
+}
+
 .nn-node.active {
     border-color: #2563eb; /* blue-600 */
     background-color: #dbeafe; /* blue-100 */
@@ -105,11 +233,10 @@ mjx-container {
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* Always use light theme */
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
 }
 
 body {
