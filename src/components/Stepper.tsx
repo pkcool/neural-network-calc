@@ -1,5 +1,24 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState, useMemo, ReactNode } from 'react';
 import { Step, NNState } from '@/types';
+// Test component to verify rendering
+const TestComponent = () => (
+  <div className="p-4 bg-yellow-100 border-2 border-yellow-500 rounded">
+    <h3 className="font-bold text-yellow-800">Test Component</h3>
+    <p>If you can see this, component rendering is working.</p>
+  </div>
+);
+
+import GradientW5Explanation from './explanations/GradientW5Explanation';
+import UpdateW5Explanation from './explanations/UpdateW5Explanation';
+
+// Import the component with a different name to avoid naming conflicts
+// Simple HTML content for testing
+const testHTML = `
+  <div class="p-4 bg-yellow-100 border border-yellow-400 text-yellow-800 rounded">
+    <h3 class="font-bold">Test HTML Rendered!</h3>
+    <p>If you can see this, HTML rendering is working.</p>
+  </div>
+`;
 import katex from 'katex';
 import 'katex/dist/katex.min.css';
 
@@ -12,6 +31,7 @@ interface StepperProps {
   onReset: () => void;
   onJumpToStep: (stepIndex: number) => void;
   nnState: NNState;
+  hideExplanation?: boolean;
 }
 
 const KatexComponent: React.FC<{ formula: string }> = ({ formula }) => {
@@ -38,9 +58,22 @@ const KatexComponent: React.FC<{ formula: string }> = ({ formula }) => {
   return <div dangerouslySetInnerHTML={{ __html: html }} />;
 };
 
-// Component to render calculation results with LaTeX support
-// Component to render explanation text with LaTeX and markdown support
-const ExplanationContent: React.FC<{ content: string }> = ({ content }) => {
+// Component to render explanation text with LaTeX, markdown, or special components
+export const ExplanationContent: React.FC<{ content: string | ReactNode }> = ({ content }) => {
+  // If content is a ReactNode (not a string), render it directly
+  if (typeof content !== 'string') {
+    return <div className="max-w-none">{content}</div>;
+  }
+  
+  // Handle special explanation keys
+  if (content === 'gradient_w5_explanation') {
+    return <GradientW5Explanation />;
+  }
+  
+  if (content === 'update_w5_explanation') {
+    return <UpdateW5Explanation />;
+  }
+  
   const renderedContent = useMemo(() => {
     // First split by double newlines to handle paragraphs
     const paragraphs = content.split(/\n\s*\n/);
@@ -145,9 +178,20 @@ const CalculationResult: React.FC<{ content: string }> = ({ content }) => {
   return <div dangerouslySetInnerHTML={{ __html: content }} />;
 };
 
-const Stepper: React.FC<StepperProps> = ({ step, stepIndex, totalSteps, onNext, onPrev, onReset, onJumpToStep, nnState }) => {
-  const { result } = step.calculation(nnState);
+
+
+const Stepper: React.FC<StepperProps> = ({ step, stepIndex, totalSteps, onNext, onPrev, onReset, onJumpToStep, nnState, hideExplanation = false }) => {
+  // Render the explanation using the ExplanationContent component
+  const renderExplanation = () => {
+    console.log('Rendering explanation for:', step.title);
+    console.log('Explanation value:', step.explanation);
+    return <ExplanationContent content={step.explanation} />;
+  };
+  const { result } = useMemo(() => step.calculation(nnState), [step, nnState]);
   
+  // Debug: Log the explanation value
+  console.log('Current explanation:', step.explanation);
+
   // Jump to the start of backward pass (step 13, index 12)
   const jumpToBackwardPass = () => {
     onJumpToStep(12); // Index 12 is step 13 (0-based)
@@ -172,11 +216,11 @@ const Stepper: React.FC<StepperProps> = ({ step, stepIndex, totalSteps, onNext, 
             </div>
           </div>
 
-          {step.explanation && (
+          {step.explanation && !hideExplanation && (
             <div className="explanation-container p-6 bg-white rounded-lg shadow-sm border border-gray-200">
               <h3 className="font-semibold text-lg mb-4 text-slate-700">Explanation</h3>
               <div className="p-4 bg-gray-50 rounded text-slate-600 leading-relaxed">
-                <ExplanationContent content={step.explanation} />
+                {renderExplanation()}
               </div>
             </div>
           )}
