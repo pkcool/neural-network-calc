@@ -206,9 +206,24 @@ $$
 \\frac{\\partial E_{total}}{\\partial w_5} = \\frac{\\partial E_{total}}{\\partial out_{o1}} \\cdot \\frac{\\partial out_{o1}}{\\partial net_{o1}} \\cdot \\frac{\\partial net_{o1}}{\\partial w_5}
 $$
 
+Substituting the values we calculated earlier:
+
+1. $\\frac{\\partial E_{total}}{\\partial out_{o1}} = 0.7414$ (from error derivative)
+2. $\\frac{\\partial out_{o1}}{\\partial net_{o1}} = out_{o1}(1 - out_{o1}) = 0.1868$ (sigmoid derivative)
+3. $\\frac{\\partial net_{o1}}{\\partial w_5} = out_{h1} = 0.5933$ (weight gradient)
+
+Now multiply them together:
+
+$$
+\\frac{\\partial E_{total}}{\\partial w_5} = 0.7414 \\times 0.1868 \\times 0.5933 = 0.0821670
+$$
+
 This gives us the gradient we'll use to update weight w5.`,
     formula: `$$
-\\frac{\\partial E_{total}}{\\partial w_5} = \\frac{\\partial E_{total}}{\\partial out_{o1}} \\cdot \\frac{\\partial out_{o1}}{\\partial net_{o1}} \\cdot \\frac{\\partial net_{o1}}{\\partial w_5} = (out_{o1} - target_{o1}) \\cdot out_{o1}(1 - out_{o1}) \\cdot out_{h1}
+\\begin{aligned}
+\\frac{\\partial E_{total}}{\\partial w_5} = \\frac{\\partial E_{total}}{\\partial out_{o1}} \\cdot \\frac{\\partial out_{o1}}{\\partial net_{o1}} \\cdot \\frac{\\partial net_{o1}}{\\partial w_5} \\
+&= (out_{o1} - target_{o1}) \\cdot out_{o1}(1 - out_{o1}) \\cdot out_{h1} \\
+\\end{aligned}
 $$`,
     calculation: (state) => {
       const { out_o1, out_h1 } = state.calculated;
