@@ -240,7 +240,20 @@ $$`,
   },
   {
     title: 'Backward Pass: Update w5',
-    explanation: 'We update the weight by moving it in the opposite direction of the gradient, scaled by a learning rate η (here, 0.5).',
+    explanation: `Now that we've calculated the gradient for w5, we can update the weight using gradient descent.
+
+$w_{new}$ is the updated weight, $w_{old}$ is the current weight, $\\eta$ is the learning rate (here, 0.5), and $\\frac{\\partial E_{total}}{\\partial w}$ is the gradient we calculated.
+
+## Intuition Behind the Update
+
+1. **Gradient Descent**: We move the weight in the opposite direction of the gradient because the gradient points in the direction of steepest increase, and we want to minimize the error.
+
+2. **Learning Rate ($\eta$)**: This hyperparameter controls how big of a step we take in the direction of the negative gradient. A higher learning rate means larger steps, which can lead to faster learning but might cause overshooting. A lower learning rate is more stable but might require more iterations.
+
+3. **The Negative Sign**: Ensures we move against the gradient, towards the minimum of the error function.
+
+
+`,
     formula: `$$w_5^{new} = w_5 - \\eta \\cdot \\frac{\\partial E_{total}}{\\partial w_5}$$`,
     calculation: (state) => {
       const w5_new = state.weights.w5 - state.learningRate * state.calculated.dE_dw5;
