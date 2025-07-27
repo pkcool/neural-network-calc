@@ -15,9 +15,11 @@ export interface NNState {
   calculated: { [key: string]: number };
 }
 
+import { ReactNode } from 'react';
+
 export interface Step {
   title: string;
-  explanation: string;
+  explanation: string | ReactNode;
   formula: string | null;
   calculation: (state: NNState) => { result: string; newState: NNState };
   highlight: {

@@ -86,7 +86,7 @@ const NeuralNetworkDiagram: React.FC<NeuralNetworkDiagramProps> = ({
     // Create nodes data
     const nodes: NodeData[] = [];
     layers.forEach((layer, layerIndex) => {
-      layer.nodes.forEach((nodeId, i) => {
+      layer.nodes.forEach((nodeId) => {
         let value = '1.0'; // Default for bias nodes
         let label = nodeId;
         
@@ -230,7 +230,7 @@ const NeuralNetworkDiagram: React.FC<NeuralNetworkDiagramProps> = ({
       .attr('fill', (d: NodeData) => highlight.nodes.includes(d.id) ? '#1e40af' : '#4b5563')
       .text((d: NodeData) => d.value);
 
-  }, [nnState, highlight, dimensions]);
+  }, [nnState, highlight, dimensions, inputs, weights, calculated]);
 
   return (
     <div className="bg-white rounded-lg h-full flex flex-col">

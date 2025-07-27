@@ -1,6 +1,12 @@
 # Interactive Neural Network Calculator
 
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-View%20App-green?style=for-the-badge&logo=vercel)](https://neural-network-calc.vercel.app)
+
 This is a web application built with Next.js, TypeScript, and Tailwind CSS that provides a step-by-step interactive walkthrough of how a simple neural network learns using forward and backward propagation.
+
+## Live Demo
+
+Check out the live demo at: [https://neural-network-calc.vercel.app](https://neural-network-calc.vercel.app)
 
 ## Features
 
@@ -8,7 +14,6 @@ This is a web application built with Next.js, TypeScript, and Tailwind CSS that 
 - **Neural Network Visualization:** A dynamic diagram that highlights the active nodes and weights for each step.
 - **Live Calculations:** See the results of each calculation as you step through the process.
 - **Mathematical Formulas:** All formulas are rendered using KaTeX for clarity.
-- **Error Reduction Chart:** A bar chart that visualizes the change in total error after one round of training.
 
 ## Tech Stack
 

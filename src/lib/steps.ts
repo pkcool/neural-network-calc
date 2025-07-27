@@ -1,4 +1,4 @@
-import { Step, NNState } from '@/types';
+import { Step } from '@/types';
 
 export const steps: Step[] = [
   // Introduction
@@ -154,71 +154,7 @@ export const steps: Step[] = [
   // Backward Pass
   {
     title: 'Backward Pass: Gradient for w5',
-    explanation: `The backward pass is where the actual learning happens through backpropagation. We'll calculate how much a change in each weight affects the total error using the chain rule of calculus. Let's start with weight w5.
-
-### Understanding the Notation
-
-The expression $\\frac{\\partial E_{total}}{\\partial w_{5}}$ is read as "the partial derivative of $E_{total}$ with respect to $w_{5}$". You can also say "the gradient with respect to $w_{5}$". This tells us how much the total error changes as we adjust the weight $w_{5}$, with all other weights held constant. Our goal is to find this value so we can adjust $w_{5}$ to minimize the total error.
-
-## Step 1: Calculate the partial derivative of total error with respect to out_o1
-
-We'll use the mean squared error function:
-
-$$
-E_{total} = \\frac{1}{2}(target_{o1} - out_{o1})^2 + \\frac{1}{2}(target_{o2} - out_{o2})^2
-$$
-
-The partial derivative is:
-
-$$
-\\frac{\\partial E_{total}}{\\partial out_{o1}} = -(target_{o1} - out_{o1}) = out_{o1} - target_{o1}
-$$
-
-## Step 2: Calculate the derivative of out_o1 with respect to net_o1
-
-Since we're using the sigmoid activation function:
-
-$$
-out_{o1} = \\frac{1}{1 + e^{-net_{o1}}}
-$$
-
-The derivative is:
-
-$$
-\\frac{\\partial out_{o1}}{\\partial net_{o1}} = out_{o1}(1 - out_{o1})
-$$
-
-## Step 3: Calculate the partial derivative of net_o1 with respect to w5
-
-$$
-net_{o1} = w_5 \\cdot out_{h1} + w_6 \\cdot out_{h2} + b_2 \\cdot 1
-$$
-
-$$
-\\frac{\\partial net_{o1}}{\\partial w_5} = out_{h1}
-$$
-
-## Final Gradient Calculation
-
-Putting it all together using the chain rule:
-
-$$
-\\frac{\\partial E_{total}}{\\partial w_5} = \\frac{\\partial E_{total}}{\\partial out_{o1}} \\cdot \\frac{\\partial out_{o1}}{\\partial net_{o1}} \\cdot \\frac{\\partial net_{o1}}{\\partial w_5}
-$$
-
-Substituting the values we calculated earlier:
-
-1. $\\frac{\\partial E_{total}}{\\partial out_{o1}} = 0.7414$ (from error derivative)
-2. $\\frac{\\partial out_{o1}}{\\partial net_{o1}} = out_{o1}(1 - out_{o1}) = 0.1868$ (sigmoid derivative)
-3. $\\frac{\\partial net_{o1}}{\\partial w_5} = out_{h1} = 0.5933$ (weight gradient)
-
-Now multiply them together:
-
-$$
-\\frac{\\partial E_{total}}{\\partial w_5} = 0.7414 \\times 0.1868 \\times 0.5933 = 0.0821670
-$$
-
-This gives us the gradient we'll use to update weight w5.`,
+    explanation: 'gradient_w5_explanation',
     formula: `$$
 \\begin{aligned}
 \\frac{\\partial E_{total}}{\\partial w_5} = \\frac{\\partial E_{total}}{\\partial out_{o1}} \\cdot \\frac{\\partial out_{o1}}{\\partial net_{o1}} \\cdot \\frac{\\partial net_{o1}}{\\partial w_5} \\
@@ -240,20 +176,7 @@ $$`,
   },
   {
     title: 'Backward Pass: Update w5',
-    explanation: `Now that we've calculated the gradient for w5, we can update the weight using gradient descent.
-
-$w_{new}$ is the updated weight, $w_{old}$ is the current weight, $\\eta$ is the learning rate (here, 0.5), and $\\frac{\\partial E_{total}}{\\partial w}$ is the gradient we calculated.
-
-## Intuition Behind the Update
-
-1. **Gradient Descent**: We move the weight in the opposite direction of the gradient because the gradient points in the direction of steepest increase, and we want to minimize the error.
-
-2. **Learning Rate ($\eta$)**: This hyperparameter controls how big of a step we take in the direction of the negative gradient. A higher learning rate means larger steps, which can lead to faster learning but might cause overshooting. A lower learning rate is more stable but might require more iterations.
-
-3. **The Negative Sign**: Ensures we move against the gradient, towards the minimum of the error function.
-
-
-`,
+    explanation: 'update_w5_explanation',
     formula: `$$w_5^{new} = w_5 - \\eta \\cdot \\frac{\\partial E_{total}}{\\partial w_5}$$`,
     calculation: (state) => {
       const w5_new = state.weights.w5 - state.learningRate * state.calculated.dE_dw5;

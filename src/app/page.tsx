@@ -3,8 +3,7 @@
 import { useState } from 'react';
 import ClientOnly from '@/components/ClientOnly';
 import NeuralNetworkDiagram from "@/components/NeuralNetworkDiagram";
-import Stepper from "@/components/Stepper";
-import SummaryChart from "@/components/SummaryChart";
+import Stepper, { ExplanationContent } from "@/components/Stepper";
 import { steps } from '@/lib/steps';
 import { INITIAL_STATE } from '@/lib/constants';
 import { NNState } from '@/types';
@@ -61,7 +60,7 @@ export default function Home() {
         <div className="flex flex-1 overflow-hidden">
           <ClientOnly>
             {/* Neural Network Diagram - Fixed height container */}
-            <div className="w-1/2 h-[calc(100vh-200px)] overflow-auto p-4 bg-white">
+            <div className="w-1/2 h-[calc(100vh-300px)] overflow-auto p-4 bg-white">
               <NeuralNetworkDiagram 
                 nnState={nnState} 
                 highlight={currentStep.highlight} 
@@ -70,7 +69,7 @@ export default function Home() {
             </div>
             
             {/* Stepper - Fixed height container with scroll */}
-            <div className="w-1/2 h-[calc(100vh-200px)] overflow-y-auto p-4 bg-white border-l border-slate-200">
+            <div className="w-1/2 h-[calc(100vh-300px)] overflow-y-auto p-4 bg-white border-l border-slate-200">
               <Stepper 
                 step={currentStep} 
                 stepIndex={currentStepIndex} 
@@ -80,14 +79,22 @@ export default function Home() {
                 onReset={handleReset}
                 onJumpToStep={jumpToStep}
                 nnState={nnState}
+                hideExplanation={true}
               />
             </div>
           </ClientOnly>
         </div>
 
-        <div className="border-t border-slate-200 p-4 bg-white">
+        <div className="border-t border-slate-200 p-4 bg-white space-y-6">
           <ClientOnly>
-            <SummaryChart nnState={nnState} />
+            {currentStep.explanation && (
+              <div className="explanation-container p-6 bg-white rounded-lg shadow-sm border border-gray-200">
+                <h3 className="font-semibold text-lg mb-4 text-slate-700">Explanation</h3>
+                <div className="p-4 bg-gray-50 rounded text-slate-600 leading-relaxed">
+                  <ExplanationContent content={currentStep.explanation} />
+                </div>
+              </div>
+            )}
           </ClientOnly>
         </div>
       </div>
