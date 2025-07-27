@@ -1,41 +1,25 @@
 import React, { useRef } from 'react';
 import { KatexComponent } from '../KatexComponent';
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
+// Import Chart.js and register required components
+import { Chart as ChartJS, registerables } from 'chart.js';
+import { Chart as ReactChart } from 'react-chartjs-2';
+import type { 
   ChartOptions,
   ChartData,
-  Chart,
   Point
 } from 'chart.js';
-import { Chart as ReactChart } from 'react-chartjs-2';
 
-type ChartType = 'line';
+// Register all required Chart.js components
+ChartJS.register(...registerables);
+
+type ChartTypeName = 'line';
 type ChartDataPoint = number | null | Point;
-// Chart context type is no longer needed
-
-// Register ChartJS components
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend
-);
 
 // Function to calculate y = x^2
 const quadraticFunction = (x: number) => x * x;
 
 const UpdateW5Explanation: React.FC = () => {
-  const chartRef = useRef<Chart<ChartType, ChartDataPoint[], unknown>>(null);
+  const chartRef = useRef<InstanceType<typeof ChartJS<ChartTypeName, ChartDataPoint[], unknown>>>(null);
   
   // Generate x-values for the plot
   const xValues = Array.from({length: 100}, (_, i) => -5 + (i / 10));
@@ -75,7 +59,7 @@ const UpdateW5Explanation: React.FC = () => {
   });
   
   // Chart data
-  const chartData: ChartData<'line'> = {
+  const chartData: ChartData<ChartTypeName> = {
     datasets: [
       {
         label: 'y = x²',
@@ -99,7 +83,7 @@ const UpdateW5Explanation: React.FC = () => {
     ]
   };
   
-  const chartOptions: ChartOptions<'line'> = {
+  const chartOptions: ChartOptions<ChartTypeName> = {
     responsive: true,
     maintainAspectRatio: true,
     aspectRatio: 1.5, // Wider than tall for better visualization
@@ -138,6 +122,7 @@ const UpdateW5Explanation: React.FC = () => {
     scales: {
       x: {
         type: 'linear',
+        position: 'center',
         title: {
           display: true,
           text: 'x (weight value)'
@@ -150,6 +135,7 @@ const UpdateW5Explanation: React.FC = () => {
       },
       y: {
         type: 'linear',
+        position: 'left',
         title: {
           display: true,
           text: 'Loss (y = x²)'
