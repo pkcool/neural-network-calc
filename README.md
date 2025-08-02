@@ -43,6 +43,30 @@ To get a local copy up and running, follow these simple steps.
    npm install
    ```
 
+### Running Tests
+
+This project includes Playwright end-to-end tests. To run the tests:
+
+1. First, ensure the development server is running:
+   ```bash
+   npm run dev
+   ```
+
+2. In a new terminal, run the tests:
+   ```bash
+   # Run tests in headless mode
+   npx playwright test
+   
+   # Run tests with UI (for debugging)
+   npx playwright test --headed
+   
+   # Run a specific test file
+   npx playwright test tests/app.spec.ts
+   
+   # Run with debug information
+   DEBUG=pw:api npx playwright test
+   ```
+
 ### Running the Development Server
 
 Run the following command to start the development server:
