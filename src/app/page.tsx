@@ -23,8 +23,13 @@ export default function Home() {
 
   const handlePrev = () => {
     if (currentStepIndex > 0) {
-      // This is a simplified version. A more robust implementation would re-calculate previous states.
-      // For now, we just go back to the previous step's view without reverting the state change.
+      // Recalculate the state by applying all steps up to the previous index
+      let currentState = INITIAL_STATE;
+      for (let i = 0; i < currentStepIndex; i++) {
+        const { newState } = steps[i].calculation(currentState);
+        currentState = newState;
+      }
+      setNnState(currentState);
       setCurrentStepIndex(currentStepIndex - 1);
     }
   };
